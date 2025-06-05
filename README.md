@@ -1,2 +1,1 @@
-# portfolio
-Stuff for prospective jobs
+# Portfolio
