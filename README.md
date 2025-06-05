@@ -25,4 +25,11 @@ Personal version of a stable-diffusion-like model that can produce images from t
 This was a project I had to fix prediction drift in a model using Near Infra-Red Spectroscopy on cattle feed. I found that the model was not the problem, but the data itself was the issue. When I reported this, I questioned whether they had calibrated the machine recently. Turns out they hadn't in something like 10 years. After doing so, they found much better results overall.
 
 ### pges_investigation
-Code that I used during my work with King's College London in order to understand Post-ictal Generalised EEG Suppression in epilepsy patients. 
+Code that I used during my work with King's College London in order to understand Post-ictal Generalised EEG Suppression in epilepsy patients. This project has a paper coming soon. 
+- **helpilepsy**: an investigation in data provided by helpilepsy, an app used for seizure diaries. I did some initial data analysis on the data.
+- **pges_duration_study**: looking into predicting the duration of PGES. This is a different problem to simply detecting it, and I focused on a post-processing approach.
+- **pges_notebooks**: studies into making an algorithm to identify PGES in EEG samples. I landed on an anomaly detection solution using a VAE.
+- **pipeline_classes**: python files that come together to make a command-line pipeline from raw EEG data to a trained algorithm (either SVM or random forest as these were the best solutions we had at the time).
+
+### pulsar_examples
+Python files that each include a different method for understanding a dataset I used to teach people AI (from undergraduate to PhD level). The "models" directory contain the algorithms, and "learning_curves" contain the learning curves produced. "ml_pres_new.pdf" shows one of the presentations I have given on this, and "pulsar_tree.pdf" shows a representation of one of the trees used.
