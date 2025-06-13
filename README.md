@@ -33,3 +33,6 @@ Code that I used during my work with King's College London in order to understan
 
 ### pulsar_examples
 Python files that each include a different method for understanding a dataset I used to teach people AI (from undergraduate to PhD level). The "models" directory contain the algorithms, and "learning_curves" contain the learning curves produced. "ml_pres_new.pdf" shows one of the presentations I have given on this, and "pulsar_tree.pdf" shows a representation of one of the trees used.
+
+### LLM_projects
+Directory where projects using LLMs will go. So far there is a simple chatbot that using a RAG system and Llama-3.2-1B-Instruct to answer cat-related questions from a small dataset of cat facts. It will keep asking you to ask it a question (it's very keen) until you type "dog" which will scare it into quitting.
