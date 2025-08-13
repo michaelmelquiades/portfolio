@@ -36,3 +36,4 @@ Python files that each include a different method for understanding a dataset I 
 
 ### LLM_projects
 Directory where projects using LLMs will go. So far there is a simple chatbot that using a RAG system and Llama-3.2-1B-Instruct to answer cat-related questions from a small dataset of cat facts. It will keep asking you to ask it a question (it's very keen) until you type "dog" which will scare it into quitting.
+Also, "prompt_schemas.py" is a file containing a function that converts any given prompt into the best form for any LLM being used.
