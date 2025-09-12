@@ -1,10 +1,20 @@
-import os 
 import argparse
 
 def parse_args() -> argparse.Namespace:
+
+    """
+    Create the command line arguments and provide descriptions.
+
+    Args:
+        None
+    
+    Returns:
+        A set of arguments to be used in the command line pipeline.
+    """
+
     parser = argparse.ArgumentParser(description="LLM Pipeline")
-    parser.add_argument("-exdat", "--example_data", type=str, default=None, help="Path of EHR examples. Either one file or folder path.")
-    parser.add_argument("-anadat", "--analysis_data", type=str, help="Path of EHRs to be analysed. Either one file or folder path.")
+    parser.add_argument("-expath", "--example_path", type=str, default=None, help="Path of EHR examples. Either one file or folder path.")
+    parser.add_argument("-anapath", "--analysis_path", type=str, required=True, help="Path of EHRs to be analysed. Either one file or folder path.")
     parser.add_argument("-rag", "--rag_on", action="store_true", help="Enable RAG.")
     parser.add_argument("-ragdat", "--rag_data", type=str, help="Path for data used in RAG (defaults to example data path).")
     parser.add_argument("-few", "--few_shot_on", action="store_true", help="Enable few-shot prompting")
