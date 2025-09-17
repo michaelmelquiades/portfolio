@@ -36,7 +36,7 @@ def get_llm_payload(
     ehr_text: str,
     system_prompt: str = GEN_SYSTEM_PROMPT,
     instruction: str = GEN_INSTRUCT_PROMPT,
-    few_shot_examples: List[Dict[str, str]] = None,
+    shot_examples: List = None,
     max_tokens: int = 256,
     schema: str = "",
     save_prompt: bool = False
@@ -49,7 +49,7 @@ def get_llm_payload(
         ehr_text: The Electronic Health Record text.
         system_prompt: The system-level instruction for the model.
         instruction: The specific task or question for the model.
-        few_shot_examples: A list of message dictionaries for few-shot prompting, 
+        shot_examples: A list of message dictionaries for X-shot prompting, 
                            e.g., [{'role': 'user', 'content': '...'}, {'role': 'assistant', 'content': '...'}].
         max_tokens: The maximum number of tokens for the response.
         save_prompt: If True, saves the generated payload to a JSON file.
@@ -68,16 +68,19 @@ def get_llm_payload(
         # System prompt is a top-level parameter.
         # It's good practice to wrap user-provided documents in XML tags for Claude.
         user_content = f"<instruction>\n{instruction}\n</instruction>\n\n<document>\n{ehr_text}\n</document>"
-        
-        if schema:
-            user_content = add_struct_gen(prompt=user_content, 
-                                          schema=schema)
 
         messages = [{"role": "user", "content": user_content}]
         
         # Add few-shot examples if they exist
-        if few_shot_examples:
-            messages = few_shot_examples + messages
+        if shot_examples:
+            messages[0]["content"] = f"{messages[0]["content"]}\nHere are examples:\n"
+            for num, example in enumerate(shot_examples, start=1):
+                with open(example, "r", encoding="utf-8") as shot:
+                    messages[0]["content"] += f"Example {num}: {shot}\n"
+
+        if schema:
+            user_content = add_struct_gen(prompt=messages[0]["content"], 
+                                          schema=schema)
 
         payload = {
             "model": model_name,
@@ -100,11 +103,14 @@ def get_llm_payload(
             {"role": "system", "content": system_prompt}
         ]
         
-        # Add few-shot examples if they exist
-        if few_shot_examples:
-            messages.extend(few_shot_examples)
-            
         messages.append({"role": "user", "content": user_content})
+
+        # Add few-shot examples if they exist
+        if shot_examples:
+            for example in shot_examples:
+                with open(example, "r", encoding="utf-8") as shot:
+                    messages.append({"role":"assistant", 
+                                     "content":shot})
 
         payload = {
             "model": model_name,

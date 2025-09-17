@@ -9,7 +9,6 @@ import system_utils as su
 import json
 
 # TODO: Implement RAG with the gold standard examples
-# TODO: pipeline this so we can get people to start using it to analyse directories
 
 if __name__ == '__main__':
     
@@ -32,14 +31,25 @@ if __name__ == '__main__':
     else:
         analysis_files = [analysis_path]
 
+    if example_path:
+        if os.path.isdir(example_path):
+            example_files = [os.path.join(example_path, f) for f in os.listdir(example_path)]
+        else:
+            example_files = [example_path]
+
     responses = {}
 
     for num, file_path in enumerate(analysis_files):
         with open(file_path, "r", encoding="utf-8") as PROMPT:
-            full_prompt = ps.get_llm_payload(model_name=MODEL_ID, 
-                                             ehr_text=PROMPT, 
-                                             schema=schema)
+            if args.add_shot_prompting:
+                if example_path:
+                    full_prompt = ps.get_llm_payload(model_name=MODEL_ID, 
+                                                    ehr_text=PROMPT, 
+                                                    schema=schema)
 
+                else:
+                    raise ValueError("No example(s) provided for X-shot prompting.")
+                
         message_to_tokenize = full_prompt['messages']
 
         inputs = lu.tokenize_text(model, tokenizer, message_to_tokenize)
@@ -49,7 +59,7 @@ if __name__ == '__main__':
         response_text = lu.generate_response(model, inputs, tokenizer)
         
         responses[num] = response_text
-        #print("\n--- LLM Response ---")
-        #print(response_text)
+        print("\n--- LLM Response ---")
+        print(response_text)
     
     json.dump(responses, open("responses.json", "w"))
