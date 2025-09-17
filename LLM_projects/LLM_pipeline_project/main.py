@@ -20,24 +20,25 @@ if __name__ == '__main__':
     TEMP = args.temperature
     TOP_P = args.top_p
     MODEL_ID = args.model_path
-
+    schema = args.output_schema
     example_path = args.example_path
     analysis_path = args.analysis_path
 
     tokenizer, model = lu.llm_setup(model_id = MODEL_ID, 
                                     access_token = ACCESS_TOKEN)
     
-    analysis_data = []
-    try:
-        analysis_data = os.listdir(analysis_path)
-    except:
-        analysis_data = [analysis_path]
+    if os.path.isdir(analysis_path):
+        analysis_files = [os.path.join(analysis_path, f) for f in os.listdir(analysis_path)]
+    else:
+        analysis_files = [analysis_path]
 
     responses = {}
 
-    for num, text in enumerate(analysis_data):
-        with open(os.path.join(analysis_path,text), "r") as PROMPT:
-            full_prompt = ps.get_llm_payload(model_name=MODEL_ID, ehr_text=PROMPT)
+    for num, file_path in enumerate(analysis_files):
+        with open(file_path, "r", encoding="utf-8") as PROMPT:
+            full_prompt = ps.get_llm_payload(model_name=MODEL_ID, 
+                                             ehr_text=PROMPT, 
+                                             schema=schema)
 
         message_to_tokenize = full_prompt['messages']
 

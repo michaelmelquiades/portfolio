@@ -13,6 +13,24 @@ GEN_INSTRUCT_PROMPT = """
 Analyse the following text for information about seizure frequency, and report a value per month.
 """
 
+def add_struct_gen(prompt: str, 
+                   schema: str) -> str:
+    """
+    Structures the output of some LLM call to a given JSON schema
+
+    Args:
+        prompt: The instruction prompt to be given to the LLM.
+        schema: A filepath to a .json file with the required schema.
+    
+    Returns:
+        String-like prompt with the schema added on to the end.
+    """
+    with open(schema, 'r') as f:
+        schema = json.load(f)
+    new_prompt = f"{prompt}\nRespond ONLY in valid JSON format, no extra text, according to the following schema:\n{schema}\n"
+    
+    return new_prompt
+
 def get_llm_payload(
     model_name: str,
     ehr_text: str,
@@ -20,6 +38,7 @@ def get_llm_payload(
     instruction: str = GEN_INSTRUCT_PROMPT,
     few_shot_examples: List[Dict[str, str]] = None,
     max_tokens: int = 256,
+    schema: str = "",
     save_prompt: bool = False
 ) -> Dict[str, Union[str, int, List]]:
     """
@@ -50,6 +69,10 @@ def get_llm_payload(
         # It's good practice to wrap user-provided documents in XML tags for Claude.
         user_content = f"<instruction>\n{instruction}\n</instruction>\n\n<document>\n{ehr_text}\n</document>"
         
+        if schema:
+            user_content = add_struct_gen(prompt=user_content, 
+                                          schema=schema)
+
         messages = [{"role": "user", "content": user_content}]
         
         # Add few-shot examples if they exist
@@ -69,6 +92,10 @@ def get_llm_payload(
         # The system prompt is the first message in the list.
         user_content = f"{instruction}\n\n{ehr_text}"
         
+        if schema:
+            user_content = add_struct_gen(prompt=user_content, 
+                                          schema=schema)
+
         messages = [
             {"role": "system", "content": system_prompt}
         ]
