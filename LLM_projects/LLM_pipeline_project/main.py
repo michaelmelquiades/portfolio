@@ -9,8 +9,6 @@ import system_utils as su
 import rag_utils as ru
 import json
 
-# TODO: Implement RAG with the gold standard examples
-
 if __name__ == '__main__':
     
     ACCESS_TOKEN = creds.ACCESS_TOKEN
@@ -64,21 +62,20 @@ if __name__ == '__main__':
             # Retrieve context and generate via RAG chain
             print(f"[INFO] Running RAG for file {file_path}...")
             query = f"Analyse this patient's EHR:\n\n{ehr_text}"
-            context_docs = retriever.get_relevant_documents(query)
+            context_docs = retriever.invoke(query)
 
             result = rag_chain.invoke({
                 "context": context_docs,
                 "question": "Summarise the seizure frequency and relevant events."
             })
             responses[num] = result
-            print("\n--- RAG Response ---\n")
-            print(result)
 
         else:
             # Standard pipeline (non-RAG)
             print(f"[INFO] Running standard LLM generation for file {file_path}...")
 
             if args.add_shot_prompting:
+                print(f"[INFO] Running X-Shot prompting...")
                 if example_path:
                     full_prompt = ps.get_llm_payload(
                         model_name=MODEL_ID,
@@ -94,16 +91,14 @@ if __name__ == '__main__':
                     schema=schema
                 )
                 
-        message_to_tokenize = "\n".join(msg["content"] for msg in full_prompt["messages"])
+            message_to_tokenize = "\n".join(msg["content"] for msg in full_prompt["messages"])
 
-        inputs = lu.tokenize_text(model, tokenizer, message_to_tokenize)
+            inputs = lu.tokenize_text(model, tokenizer, message_to_tokenize)
 
-        # Generate the response
-        response_text = lu.generate_response(model, inputs, tokenizer)
-        
-        responses[num] = response_text
-        print("\n--- LLM Response ---")
-        print(response_text)
+            # Generate the response
+            response_text = lu.generate_response(model, inputs, tokenizer)
+            
+            responses[num] = response_text
     
     output_path = args.output_path or "responses.json"
     with open(output_path, "w", encoding="utf-8") as f:

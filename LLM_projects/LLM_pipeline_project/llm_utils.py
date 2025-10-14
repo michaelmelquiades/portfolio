@@ -52,20 +52,20 @@ def tokenize_text(model: PreTrainedModel,
     Returns:
         Tokenized and encoded message to be passed to the model.
     """
-
+    if isinstance(message_to_tokenize, str):
+        message_to_tokenize = [{"role":"user", 
+                                "content":message_to_tokenize}]
     formatted_prompt = tokenizer.apply_chat_template(
         message_to_tokenize, 
         add_generation_prompt = True, 
         tokenize = False
     )
-
     inputs = tokenizer(
         formatted_prompt,
         return_tensors = "pt",
         padding = True,
         truncation = True
     ).to(model.device)
-
     return inputs
 
 def generate_response(model: PreTrainedModel, 
