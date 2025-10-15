@@ -19,6 +19,8 @@ if __name__ == '__main__':
     TOP_P = args.top_p
     MODEL_ID = args.model_path
     schema = args.output_schema
+    if schema != None:
+        print(f'[INFO] Output schema set using: {schema}')
     example_path = args.example_path
     analysis_path = args.analysis_path
     rag_on = args.rag_on

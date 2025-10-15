@@ -32,7 +32,7 @@ def add_struct_gen(prompt: str,
     return new_prompt
 
 def get_llm_payload(
-    model_name: str,
+    model_id: str,
     ehr_text: str,
     system_prompt: str = GEN_SYSTEM_PROMPT,
     instruction: str = GEN_INSTRUCT_PROMPT,
@@ -45,7 +45,7 @@ def get_llm_payload(
     Structures a prompt and EHR into the correct API payload for various LLMs.
 
     Args:
-        model_name: The name of the model (e.g., 'gpt-4o', 'claude-3-5-sonnet-20240620').
+        model_id: The name of the model (e.g., 'gpt-4o', 'claude-3-5-sonnet-20240620').
         ehr_text: The Electronic Health Record text.
         system_prompt: The system-level instruction for the model.
         instruction: The specific task or question for the model.
@@ -57,7 +57,7 @@ def get_llm_payload(
     Returns:
         A dictionary representing the JSON payload for the API request.
     """
-    model_lower = model_name.lower()
+    model_lower = model_id.lower()
     payload = {}
     
     # Most modern APIs (OpenAI, Llama, Mistral, Qwen, DeepSeek) are OpenAI-compatible.
@@ -83,7 +83,7 @@ def get_llm_payload(
                                           schema=schema)
 
         payload = {
-            "model": model_name,
+            "model": model_id,
             "max_tokens": max_tokens,
             "system": system_prompt,
             "messages": messages
@@ -113,14 +113,14 @@ def get_llm_payload(
                                      "content":shot})
 
         payload = {
-            "model": model_name,
+            "model": model_id,
             "max_tokens": max_tokens,
             "messages": messages
         }
 
     # Save the final payload if requested
     if save_prompt:
-        file_name = f"structured_payload_{model_name.replace('/', '_')}.json"
+        file_name = f"structured_payload_{model_id.replace('/', '_')}.json"
         with open(file_name, "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=4)
         print(f"Payload saved to {file_name}")
