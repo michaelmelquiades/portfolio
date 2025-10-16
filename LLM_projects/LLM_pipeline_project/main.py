@@ -18,13 +18,30 @@ if __name__ == '__main__':
     TEMP = args.temperature
     TOP_P = args.top_p
     MODEL_ID = args.model_path
+    
     schema = args.output_schema
     if schema != None:
         print(f'[INFO] Output schema set using: {schema}')
+    
     example_path = args.example_path
     analysis_path = args.analysis_path
     rag_on = args.rag_on
     rag_data_path = args.rag_data or example_path
+    
+    system_prompt = args.system_prompt
+    if system_prompt.endswith(".txt"):
+        with open(system_prompt, "r") as s:
+            system_prompt = s
+    if system_prompt != ps.GEN_SYSTEM_PROMPT:
+        print(f"[INFO] Changing system prompt to: {system_prompt}")
+    
+    instruct_prompt = args.instruction_prompt
+    if instruct_prompt.endswith(".txt"):
+        with open(instruct_prompt, "r") as i:
+            instruct_prompt = i
+    if instruct_prompt != ps.GEN_INSTRUCT_PROMPT:
+        print(f"[INFO] Changing instruction prompt to: {instruct_prompt}")
+    
 
 
     tokenizer, model = lu.llm_setup(model_id = MODEL_ID, 

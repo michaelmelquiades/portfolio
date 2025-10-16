@@ -40,5 +40,7 @@ A full list of arguments passable to the command line is given below:
 - --temperature (-temp): Set LLM temperature between 0-1. Defaults to 0.3.
 - --top_p (-top_p): Set LLM Top P value between 0-1. Defaults to 0.5.
 - --model_path (-model): Path to the model to be used. Defaults to meta-llama/Llama-3.2-1B-Instruct.
+- --system_prompt (-sys): The general system prompt for the model. Either a string or .txt file with the prompt inside.
+- --instruction_prompt (-instr): The general instruction prompt for the model. Either a string or a .txt file with the prompt inside.
 
 For help with anything else, please contact **Dr Joe Davies** at: joe.m.davies@kcl.ac.uk
