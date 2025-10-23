@@ -11,6 +11,8 @@ import json
 
 if __name__ == '__main__':
     
+    print("Main processes called.")
+
     ACCESS_TOKEN = creds.ACCESS_TOKEN
     
     args = su.parse_args()
@@ -97,7 +99,7 @@ if __name__ == '__main__':
                 print(f"[INFO] Running X-Shot prompting...")
                 if example_path:
                     full_prompt = ps.get_llm_payload(
-                        model_name=MODEL_ID,
+                        model_id=MODEL_ID,
                         ehr_text=ehr_text,
                         schema=schema
                     )
@@ -105,7 +107,7 @@ if __name__ == '__main__':
                     raise ValueError("No example(s) provided for X-shot prompting.")
             else:
                 full_prompt = ps.get_llm_payload(
-                    model_name=MODEL_ID,
+                    model_id=MODEL_ID,
                     ehr_text=ehr_text,
                     schema=schema
                 )
