@@ -2,6 +2,8 @@
 
 This details the ongoing project to create a one-stop-shop for analysing and producing Electronic Health Records. This includes the ability to add X-shot prompting, structured output and RAG. This is a fully local system, so a locally downloaded LLM is required. </br>
 
+There are two versions available. One is a command line interface, instructions for which are below. The other is a GUI that can be found as an executable in the ```dist``` directory called ```main_gui.exe```. The GUI can also be run from a terminal-like system using ```python main_gui.py``` after downloading the files here. Both options get the same results.
+
 To install the necessary libraries, use the following in a terminal:
 
 ```pip install os random torch transformers json argparse typing langchain langchain-community langchain-core```
@@ -16,6 +18,9 @@ in the same directory as the rest of the code.</br>
 
 
 ## Usage
+
+To use the executable, simply run it and use the GUI. 
+When browsing for files or folders using the browse buttons, if you want to use an entire directory simply cancel the first browser window and use the second that pops up. PyQT6 has no native method for doing both at once, so this is a workaround. After initial conditions are set, click ```Run Model``` and the program will execute. The ```output``` box will show any information or errors during run-time.
 
 To use in command line, the following must be present:
 
