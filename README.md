@@ -38,3 +38,6 @@ Python files that each include a different method for understanding a dataset I 
 Directory where projects using LLMs will go. 
 - **cat_bot**: simple chatbot that using a RAG system and Llama-3.2-1B-Instruct to answer cat-related questions from a small dataset of cat facts. It will keep asking you to ask it a question (it's very keen) until you type "dog" which will scare it into quitting.
 - **LLM_pipeline_project**: one-stop-analysis-shop for processing electronic health records using locally downloaded LLMs. Includes X-shot prompting, RAG and structured output. Includes an executable GUI version of the code.
+
+### RNLI_notebooks
+Set of notebooks used in my work with the Royal National Lifeboat Institute. Includes pedagogical and analysis work on topics including time series forecasting and non-LLM NLP.
